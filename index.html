@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="bulma.css">
+  <title>Document</title>
+</head>
+
+<body>
+  <div id="app">
+    <section class="hero is-info has-text-centered">
+      <div class="hero-body">
+        <h1 class="title is-18">Interpolacion</h1>
+      </div>
+    </section>
+    <main class="section">
+      <div class="container">
+        <div class="columns is-centered">
+          <div class="column is-6-desktop">
+            <div class="field has-addons">
+              <p class="control">
+                <a class="button is-static">
+                  M&eacute;todo
+                </a>
+              </p>
+              <div class="control">
+                <div class="select">
+                  <select>
+                    <option value="LINEAR">Linear</option>
+                    <option value="LAGRANGE">Lagrange</option>
+                    <option value="QUADRATIC">Cuadr&aacute;tica</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="content">
+              <table class="table is-fullwidth">
+                <thead>
+                  <tr>
+                    <th>x</th>
+                    <th>f(x)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>5</td>
+                    <td>113</td>
+                  </tr>
+                  <tr>
+                    <td>20</td>
+                    <td>181</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="column is-3-desktop">
+            <div class="content">
+              <blockquote>
+                En el subcampo matemático del análisis numérico, se le denomina <b>interpolacion</b> a la
+                obtención
+                de nuevos puntos partiendo del conocimiento de un conjunto discreto de puntos.
+              </blockquote>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</body>
+
+<script src="vue.js"></script>
+<script src="interpolation.js"></script>
+
+</html>
