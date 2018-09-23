@@ -7,6 +7,15 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <link rel="stylesheet" href="bulma.css">
   <title>Document</title>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
+  <script src="plotly-latest.min.js"></script>
+  <script src="vue.js"></script>
+  <script src="interpolation.js"></script>
+  <style>
+    .MJXc-display {
+      margin: 0 !important;
+    }
+  </style>
 </head>
 
 <body>
@@ -19,42 +28,183 @@
     <main class="section">
       <div class="container">
         <div class="columns is-centered">
-          <div class="column is-6-desktop">
-            <div class="field has-addons">
-              <p class="control">
-                <a class="button is-static">
-                  M&eacute;todo
-                </a>
-              </p>
-              <div class="control">
-                <div class="select">
-                  <select>
-                    <option value="LINEAR">Linear</option>
-                    <option value="LAGRANGE">Lagrange</option>
-                    <option value="QUADRATIC">Cuadr&aacute;tica</option>
-                  </select>
+          <div class="column is-7-desktop is-10-tablet is-12-mobile">
+            <div class="is-12">
+              <div class="field is-grouped">
+                <div class="control">
+                  <div class="field has-addons">
+                    <div class="control">
+                      <a class="button is-static">
+                        $$x$$
+                      </a>
+                    </div>
+                    <div class="control">
+                      <input type="number" class="input">
+                    </div>
+                  </div>
+                </div>
+                <div class="control">
+                  <div class="field has-addons">
+                    <p class="control">
+                      <a class="button is-static">
+                        M&eacute;todo
+                        {{ form.method }}
+                      </a>
+                    </p>
+                    <div class="control">
+                      <div class="select">
+                        <select v-model="form.method" @change="showTable()">
+                          <option value="linear">Linear</option>
+                          <option value="lagrange">Lagrange</option>
+                          <option value="quadratic">Cuadr&aacute;tica</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
+              <div class="content">
+                <table id="linear" class="table is-fullwidth is-bordered is-striped" v-show="form.tables.linear">
+                  <thead>
+                    <tr>
+                      <th class="is-size-5">$$i$$</th>
+                      <th class="is-size-4">$$x_{i}$$</th>
+                      <th class="is-size-5">$$f(x_{i})$$</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>0</td>
+                      <td>
+                        <div class="field">
+                          <div class="control">
+                            <input type="number" class="input">
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="field">
+                          <div class="control">
+                            <input type="number" class="input">
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>1</td>
+                      <td>
+                        <div class="field">
+                          <div class="control">
+                            <input type="number" class="input">
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="field">
+                          <div class="control">
+                            <input type="number" class="input">
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <table id="lagrange" class="table is-fullwidth is-bordered is-striped" v-show="form.tables.lagrange">
+                  <thead>
+                    <tr>
+                      <th class="is-size-5">$$i$$</th>
+                      <th class="is-size-4">$$x_{i}$$</th>
+                      <th class="is-size-5">$$f(x_{i})$$</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>0</td>
+                      <td>
+                        <div class="field">
+                          <div class="control">
+                            <input type="number" class="input">
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="field">
+                          <div class="control">
+                            <input type="number" class="input">
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>1</td>
+                      <td>
+                        <div class="field">
+                          <div class="control">
+                            <input type="number" class="input">
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="field">
+                          <div class="control">
+                            <input type="number" class="input">
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <table id="quadratic" class="table is-fullwidth is-bordered is-striped" v-show="form.tables.quadratic">
+                  <thead>
+                    <tr>
+                      <th class="is-size-5">$$i$$</th>
+                      <th class="is-size-4">$$x_{i}$$</th>
+                      <th class="is-size-5">$$f(x_{i})$$</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>0</td>
+                      <td>
+                        <div class="field">
+                          <div class="control">
+                            <input type="number" class="input">
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="field">
+                          <div class="control">
+                            <input type="number" class="input">
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>1</td>
+                      <td>
+                        <div class="field">
+                          <div class="control">
+                            <input type="number" class="input">
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="field">
+                          <div class="control">
+                            <input type="number" class="input">
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
-            <div class="content">
-              <table class="table is-fullwidth">
-                <thead>
-                  <tr>
-                    <th>x</th>
-                    <th>f(x)</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>5</td>
-                    <td>113</td>
-                  </tr>
-                  <tr>
-                    <td>20</td>
-                    <td>181</td>
-                  </tr>
-                </tbody>
-              </table>
+            <hr>
+            <div id="result" class="is-12">
+              <p class="is-size-3">Resultado</p>
+              <div id="chart"></div>
             </div>
           </div>
           <div class="column is-3-desktop">
@@ -71,8 +221,47 @@
     </main>
   </div>
 </body>
+<script>
+  var trace = {
+    x: [5, 10, 20],
+    y: [113, 153.66666666666666, 181],
+    mode: 'lines+markers',
+    name: 'Scatter + Lines'
+  };
 
-<script src="vue.js"></script>
-<script src="interpolation.js"></script>
+  var data = [trace];
+
+  var layout = {
+    title: 'Adding Names to Line and Scatter Plot'
+  };
+
+  Plotly.newPlot('chart', data, layout);
+
+  const vm = new Vue({
+    el: '#app',
+    data: {
+      form: {
+        method: 'linear',
+        tables: {
+          linear: true,
+          lagrange: false,
+          quadratic: false,
+          current: 'linear'
+        }
+      }
+    },
+    methods: {
+      showTable: function () {
+        const selectedTable = this.form.method,
+          currentTable = this.form.tables.current;
+        if (selectedTable !== currentTable) {
+          this.form.tables.current = selectedTable;
+          this.form.tables[currentTable] = false;
+          this.form.tables[selectedTable] = true;
+        }
+      }
+    }
+  })
+</script>
 
 </html>
