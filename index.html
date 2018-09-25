@@ -5,17 +5,25 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <link rel="stylesheet" href="bulma.css">
+
   <title>Document</title>
-  <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
-  <script src="plotly-latest.min.js"></script>
-  <script src="vue.js"></script>
-  <script src="interpolation.js"></script>
+
+  <!-- stylesheets-->
+  <link rel="stylesheet" href="bulma.css">
   <style>
     .MJXc-display {
       margin: 0 !important;
     }
   </style>
+  <!-- /stylesheets -->
+
+  <!-- scripts-->
+  <script src="https://use.fontawesome.com/2bd0c3fbaf.js"></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
+  <script src="plotly-latest.min.js"></script>
+  <script src="vue.js"></script>
+  <script src="interpolation.js"></script>
+  <!-- scripts -->
 </head>
 
 <body>
@@ -39,17 +47,14 @@
                       </a>
                     </div>
                     <div class="control">
-                      <input type="number" class="input">
+                      <input type="number" class="input" v-model="x">
                     </div>
                   </div>
                 </div>
                 <div class="control">
                   <div class="field has-addons">
                     <p class="control">
-                      <a class="button is-static">
-                        M&eacute;todo
-                        {{ form.method }}
-                      </a>
+                      <a class="button is-static">M&eacute;todo</a>
                     </p>
                     <div class="control">
                       <div class="select">
@@ -61,152 +66,27 @@
                       </div>
                     </div>
                     <div class="control">
-                      <button class="button is-info" v-if="form.tables.lagrange">Add point</button>
+                      <button class="button is-info" v-if="form.tables.lagrange" @click="addPoint()"><span><i class="fa fa-plus"
+                            aria-hidden="true"></i>&nbsp;</span>Puntos</button>
                     </div>
                   </div>
                 </div>
               </div>
               <div class="content">
-                <table id="linear" class="table is-fullwidth is-bordered is-striped" v-show="form.tables.linear">
-                  <thead>
-                    <tr>
-                      <th class="is-size-5">$$i$$</th>
-                      <th class="is-size-4">$$x_{i}$$</th>
-                      <th class="is-size-5">$$f(x_{i})$$</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>0</td>
-                      <td>
-                        <div class="field">
-                          <div class="control">
-                            <input type="number" class="input">
-                          </div>
-                        </div>
-                      </td>
-                      <td>
-                        <div class="field">
-                          <div class="control">
-                            <input type="number" class="input">
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>1</td>
-                      <td>
-                        <div class="field">
-                          <div class="control">
-                            <input type="number" class="input">
-                          </div>
-                        </div>
-                      </td>
-                      <td>
-                        <div class="field">
-                          <div class="control">
-                            <input type="number" class="input">
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-                <table id="lagrange" class="table is-fullwidth is-bordered is-striped" v-show="form.tables.lagrange">
-                  <thead>
-                    <tr>
-                      <th class="is-size-5">$$i$$</th>
-                      <th class="is-size-4">$$x_{i}$$</th>
-                      <th class="is-size-5">$$f(x_{i})$$</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>0</td>
-                      <td>
-                        <div class="field">
-                          <div class="control">
-                            <input type="number" class="input">
-                          </div>
-                        </div>
-                      </td>
-                      <td>
-                        <div class="field">
-                          <div class="control">
-                            <input type="number" class="input">
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>1</td>
-                      <td>
-                        <div class="field">
-                          <div class="control">
-                            <input type="number" class="input">
-                          </div>
-                        </div>
-                      </td>
-                      <td>
-                        <div class="field">
-                          <div class="control">
-                            <input type="number" class="input">
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-                <table id="quadratic" class="table is-fullwidth is-bordered is-striped" v-show="form.tables.quadratic">
-                  <thead>
-                    <tr>
-                      <th class="is-size-5">$$i$$</th>
-                      <th class="is-size-4">$$x_{i}$$</th>
-                      <th class="is-size-5">$$f(x_{i})$$</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>0</td>
-                      <td>
-                        <div class="field">
-                          <div class="control">
-                            <input type="number" class="input">
-                          </div>
-                        </div>
-                      </td>
-                      <td>
-                        <div class="field">
-                          <div class="control">
-                            <input type="number" class="input">
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>1</td>
-                      <td>
-                        <div class="field">
-                          <div class="control">
-                            <input type="number" class="input">
-                          </div>
-                        </div>
-                      </td>
-                      <td>
-                        <div class="field">
-                          <div class="control">
-                            <input type="number" class="input">
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
+                <method-table :points="linear" :show="form.tables.linear"></method-table>
+                <method-table :points="lagrange" :show="form.tables.lagrange"></method-table>
+                <method-table :points="quadratic" :show="form.tables.quadratic"></method-table>
+                <button class="button is-primary is-fullwidth" @click="resolve()">Calcular</button>
               </div>
             </div>
             <hr>
-            <div id="result" class="is-12">
-              <p class="is-size-3">Resultado</p>
+            <div id="result" class="is-12" v-show="showResult">
+              <div class="content">
+                <p class="is-size-3">Resultado</p>
+                <br>
+                <h2 class="is-size-2">$$ f({{ x }}) \approx {{ fx }} $$</h2>
+              </div>
+
               <div id="chart"></div>
             </div>
           </div>
@@ -224,6 +104,7 @@
     </main>
   </div>
 </body>
+<script src="method-table.js"></script>
 <script>
   var trace = {
     x: [5, 10, 20],
@@ -251,10 +132,26 @@
           quadratic: false,
           current: 'linear'
         }
-      }
+      },
+      x: '',
+      linear: [
+        { x: '', fx: '' },
+        { x: '', fx: '' }
+      ],
+      lagrange: [
+        { x: '', fx: '' },
+        { x: '', fx: '' }
+      ],
+      quadratic: [
+        { x: '', fx: '' },
+        { x: '', fx: '' },
+        { x: '', fx: '' }
+      ],
+      showResult: false,
+      fx: 0
     },
     methods: {
-      showTable: function () {
+      showTable() {
         const selectedTable = this.form.method,
           currentTable = this.form.tables.current;
         if (selectedTable !== currentTable) {
@@ -262,6 +159,31 @@
           this.form.tables[currentTable] = false;
           this.form.tables[selectedTable] = true;
         }
+      },
+      addPoint() {
+        this.lagrange.push({ x: '', fx: '' });
+      },
+      resolve() {
+        this._fx();
+        this.showResult = true;
+      },
+      _getValues(method, axis) {
+        return new Promise((resolve, reject) => {
+          let values = [];
+          const length = this[method].length;
+          for (let i = 0; i < length; i++) {
+            values.push(Number(this[method][i][axis]));
+          }
+          resolve(values);
+        })
+      },
+      _fx() {
+        const method = this.form.method;
+        this._getValues(method, 'x').then(xs => {
+          this._getValues(method, 'fx').then(fxs => {
+            Interpolation[method](Number(this.x), xs, fxs).then(res => this.fx = res.toFixed(4));
+          })
+        });
       }
     }
   })
