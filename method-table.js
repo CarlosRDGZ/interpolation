@@ -30,12 +30,12 @@ Vue.component("method-table", {
       </tbody>
     </table>
     `,
-    methods: {
-      validateInput(ev) {
-        console.log(ev.target._value, Number(ev.target._value));
-        if (isNaN(Number(ev.target._value))) {
-          console.log(ev.target);
-        }
+  methods: {
+    validateInput(ev) {
+      console.log(ev.target._value, Number(ev.target._value));
+      if (isNaN(Number(ev.target._value))) {
+        console.log(ev.target);
       }
     }
+  }
 });

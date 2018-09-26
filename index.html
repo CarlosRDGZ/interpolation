@@ -76,7 +76,7 @@
                 <method-table :points="linear" :show="form.tables.linear"></method-table>
                 <method-table :points="lagrange" :show="form.tables.lagrange"></method-table>
                 <method-table :points="quadratic" :show="form.tables.quadratic"></method-table>
-                <button class="button is-primary is-fullwidth" @click="showResult = !showResult">Calcular</button>
+                <button class="button is-primary is-fullwidth" @click="makeChart()">Calcular</button>
               </div>
             </div>
             <hr>
@@ -105,21 +105,6 @@
 </body>
 <script src="method-table.js"></script>
 <script>
-  var trace = {
-    x: [5, 10, 20],
-    y: [113, 153.66666666666666, 181],
-    mode: 'lines+markers',
-    name: 'Scatter + Lines'
-  };
-
-  var data = [trace];
-
-  var layout = {
-    title: 'Adding Names to Line and Scatter Plot'
-  };
-
-  Plotly.newPlot('chart', data, layout);
-
   const vm = new Vue({
     el: '#app',
     data: {
@@ -132,10 +117,10 @@
           current: 'linear'
         }
       },
-      x: '',
+      x: '10',
       linear: [
-        { x: '', fx: '' },
-        { x: '', fx: '' }
+        { x: '5', fx: '113' },
+        { x: '20', fx: '181' }
       ],
       lagrange: [
         { x: '', fx: '' },
@@ -161,6 +146,52 @@
       addPoint() {
         this.lagrange.push({ x: '', fx: '' });
       },
+      makeChart() {
+        this.showResult = true;
+        let name;
+        const x = [], fx = [];
+        const method = this.form.method;
+        const length = this[method].length;
+
+        for (let i = 0; i < length; i++) {
+          console.log(method, this[method], this[method][i].x)
+          x.push(this[method][i].x);
+          fx.push(this[method][i].fx);
+        }
+
+        switch (method) {
+          case 'linear': name = 'Linear'; break;
+          case 'lagrange': name = 'Lagrange'; break;
+          case 'quadratic': name = 'Cuadratica'; break;
+        }
+
+        const trace = {
+          x: x,
+          y: fx,
+          mode: 'lines+markers',
+          name: `Interpolacion ${name}`
+        };
+
+        const result = {
+          x: [Number(this.x)],
+          y: [this.fx],
+          type: 'scatter',
+          mode: 'markers',
+          marker: {
+            color: 'rgb(249, 83, 37)',
+            size: 10
+          },
+          name: 'Resultado'
+        };
+        
+        const data = [trace, result];
+
+        const layout = {
+          title: `Interpolacion ${name}`
+        };
+
+        Plotly.react('chart', data, layout);
+      },
       _getValues(method, axis) {
         let values = [];
         const length = this[method].length;
@@ -181,6 +212,9 @@
           console.error(err);
         }
       }
+    },
+    created() {
+      Plotly.newPlot('chart', [], { title: 'layout' });
     }
   })
 </script>
