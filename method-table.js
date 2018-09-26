@@ -15,14 +15,14 @@ Vue.component("method-table", {
           <td>
             <div class="field">
               <div class="control">
-                <input v-model="point.x" type="number" class="input" @change="validateInput">
+                <input v-model="point.x" type="number" class="input" @change="$emit('hide-results')" @keyup="$emit('hide-results')" @keyup.13="$emit('calculate')">
               </div>
             </div>
           </td>
           <td>
             <div class="field">
               <div class="control">
-                <input v-model="point.fx" type="number" class="input" @change="validateInput">
+                <input v-model="point.fx" type="number" class="input" @change="$emit('hide-results')" @keyup="$emit('hide-results')" @keyup.13="$emit('calculate')">
               </div>
             </div>
           </td>
@@ -30,12 +30,4 @@ Vue.component("method-table", {
       </tbody>
     </table>
     `,
-  methods: {
-    validateInput(ev) {
-      console.log(ev.target._value, Number(ev.target._value));
-      if (isNaN(Number(ev.target._value))) {
-        console.log(ev.target);
-      }
-    }
-  }
 });

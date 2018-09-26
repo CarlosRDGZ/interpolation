@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-  <title>Document</title>
+  <title>Interpolaci&oacute;n</title>
 
   <!-- stylesheets-->
   <link rel="stylesheet" href="bulma.css">
@@ -30,13 +30,13 @@
   <div id="app">
     <section class="hero is-info has-text-centered">
       <div class="hero-body">
-        <h1 class="title is-18">Interpolacion</h1>
+        <h1 class="title is-1">Interpolaci&oacute;n</h1>
       </div>
     </section>
     <main class="section">
       <div class="container">
         <div class="columns is-centered">
-          <div class="column is-7-desktop is-10-tablet is-12-mobile">
+          <div class="column is-7-desktop is-12-tablet is-12-mobile">
             <div class="is-12">
               <div class="field is-grouped">
                 <div class="control">
@@ -73,9 +73,24 @@
                 </div>
               </div>
               <div class="content">
-                <method-table :points="linear" :show="form.tables.linear"></method-table>
-                <method-table :points="lagrange" :show="form.tables.lagrange"></method-table>
-                <method-table :points="quadratic" :show="form.tables.quadratic"></method-table>
+                <method-table
+                  :points="linear"
+                  :show="form.tables.linear"
+                  :valid="form.valid.linear"
+                  v-on:hide-results="showResult = false"
+                  v-on:calculate="makeChart()"></method-table>
+                <method-table
+                  :points="lagrange"
+                  :show="form.tables.lagrange"
+                  :valid="form.valid.lagrange"
+                  v-on:hide-results="showResult = false"
+                  v-on:calculate="makeChart()"></method-table>
+                <method-table
+                  :points="quadratic"
+                  :show="form.tables.quadratic"
+                  :valid="form.valid.quadratic"
+                  v-on:hide-results="showResult = false"
+                  v-on:calculate="makeChart()"></method-table>
                 <button class="button is-primary is-fullwidth" @click="makeChart()">Calcular</button>
               </div>
             </div>
@@ -85,13 +100,13 @@
                 <h3 class="is-size-3">Resultado</h3>
                 <p class="is-size-2">&#402;({{ x }}) &#8776; {{ fx }}</p>
               </div>
-
               <div id="chart"></div>
             </div>
           </div>
-          <div class="column is-3-desktop">
+          <div class="column is-3-desktop is-12-mobile">
             <div class="content">
               <blockquote>
+                <p class="is-size-4">Inerpolacion</p>
                 En el subcampo matemático del análisis numérico, se le denomina <b>interpolacion</b> a la
                 obtención
                 de nuevos puntos partiendo del conocimiento de un conjunto discreto de puntos.
@@ -115,12 +130,17 @@
           lagrange: false,
           quadratic: false,
           current: 'linear'
+        },
+        valid: {
+          linear: false,
+          lagrange: false,
+          quadratic: false,
         }
       },
-      x: '10',
+      x: '',
       linear: [
-        { x: '5', fx: '113' },
-        { x: '20', fx: '181' }
+        { x: '', fx: '' },
+        { x: '', fx: '' }
       ],
       lagrange: [
         { x: '', fx: '' },
@@ -147,50 +167,63 @@
         this.lagrange.push({ x: '', fx: '' });
       },
       makeChart() {
-        this.showResult = true;
-        let name;
-        const x = [], fx = [];
+        if (this._validate()) {
+          this.showResult = true;
+          let name;
+          const x = [], fx = [];
+          const method = this.form.method;
+          const length = this[method].length;
+  
+          for (let i = 0; i < length; i++) {
+            x.push(this[method][i].x);
+            fx.push(this[method][i].fx);
+          }
+  
+          switch (method) {
+            case 'linear': name = 'Linear'; break;
+            case 'lagrange': name = 'Lagrange'; break;
+            case 'quadratic': name = 'Cuadratica'; break;
+          }
+  
+          const trace = {
+            x: x,
+            y: fx,
+            mode: 'lines+markers',
+            name: `Interpolacion ${name}`
+          };
+  
+          const result = {
+            x: [Number(this.x)],
+            y: [this.fx],
+            type: 'scatter',
+            mode: 'markers',
+            marker: {
+              color: 'rgb(249, 83, 37)',
+              size: 10
+            },
+            name: 'Resultado'
+          };
+          
+          const data = [trace, result];
+  
+          const layout = {
+            title: `Interpolacion ${name}`
+          };
+  
+          Plotly.react('chart', data, layout, { editable: false });
+        }
+      },
+      _validate() {
         const method = this.form.method;
+        const data = this[method];
         const length = this[method].length;
-
         for (let i = 0; i < length; i++) {
-          console.log(method, this[method], this[method][i].x)
-          x.push(this[method][i].x);
-          fx.push(this[method][i].fx);
+          if (!/\d+(,\d+)?/.test(data[i].x) || !/\d+(,\d+)?/.test(data[i].fx)) {
+            alert("Los valores deben de ser númericos");
+            return false;
+          }
+          return true;
         }
-
-        switch (method) {
-          case 'linear': name = 'Linear'; break;
-          case 'lagrange': name = 'Lagrange'; break;
-          case 'quadratic': name = 'Cuadratica'; break;
-        }
-
-        const trace = {
-          x: x,
-          y: fx,
-          mode: 'lines+markers',
-          name: `Interpolacion ${name}`
-        };
-
-        const result = {
-          x: [Number(this.x)],
-          y: [this.fx],
-          type: 'scatter',
-          mode: 'markers',
-          marker: {
-            color: 'rgb(249, 83, 37)',
-            size: 10
-          },
-          name: 'Resultado'
-        };
-        
-        const data = [trace, result];
-
-        const layout = {
-          title: `Interpolacion ${name}`
-        };
-
-        Plotly.react('chart', data, layout);
       },
       _getValues(method, axis) {
         let values = [];
