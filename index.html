@@ -69,6 +69,10 @@
                       <button class="button is-info" v-if="form.tables.lagrange" @click="addPoint()"><span><i class="fa fa-plus"
                             aria-hidden="true"></i>&nbsp;</span>Puntos</button>
                     </div>
+                    <div class="control">
+                      <button class="button is-danger" v-if="form.tables.lagrange" @click="removePoint()"><i class="fa fa-minus"
+                        aria-hidden="true"></i>&nbsp;</span>Puntos</button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -162,9 +166,14 @@
           this.form.tables[currentTable] = false;
           this.form.tables[selectedTable] = true;
         }
+        if (this.showResult) this.showResult = false;
       },
       addPoint() {
         this.lagrange.push({ x: '', fx: '' });
+      },
+      removePoint() {
+        if (this.lagrange.length > 2)
+          this.lagrange.pop();
       },
       makeChart() {
         if (this._validate()) {
@@ -248,7 +257,7 @@
     },
     created() {
       Plotly.newPlot('chart', [], { title: 'layout' });
-    }
+      }
   })
 </script>
 
