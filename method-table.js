@@ -1,5 +1,5 @@
 Vue.component("method-table", {
-  props: ["points", "show"],
+  props: ["points", "show", "valid"],
   template: `
     <table class="table is-fullwidth is-bordered is-striped" v-show="show">
       <thead>
@@ -15,19 +15,27 @@ Vue.component("method-table", {
           <td>
             <div class="field">
               <div class="control">
-                <input v-model="point.x" type="number" class="input">
+                <input v-model="point.x" type="number" class="input" @change="validateInput">
               </div>
             </div>
           </td>
           <td>
             <div class="field">
               <div class="control">
-                <input v-model="point.fx" type="number" class="input">
+                <input v-model="point.fx" type="number" class="input" @change="validateInput">
               </div>
             </div>
           </td>
         </tr>
       </tbody>
     </table>
-    `
+    `,
+    methods: {
+      validateInput(ev) {
+        console.log(ev.target._value, Number(ev.target._value));
+        if (isNaN(Number(ev.target._value))) {
+          console.log(ev.target);
+        }
+      }
+    }
 });

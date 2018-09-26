@@ -76,15 +76,14 @@
                 <method-table :points="linear" :show="form.tables.linear"></method-table>
                 <method-table :points="lagrange" :show="form.tables.lagrange"></method-table>
                 <method-table :points="quadratic" :show="form.tables.quadratic"></method-table>
-                <button class="button is-primary is-fullwidth" @click="resolve()">Calcular</button>
+                <button class="button is-primary is-fullwidth" @click="showResult = !showResult">Calcular</button>
               </div>
             </div>
             <hr>
             <div id="result" class="is-12" v-show="showResult">
               <div class="content">
-                <p class="is-size-3">Resultado</p>
-                <br>
-                <h2 class="is-size-2">$$ f({{ x }}) \approx {{ fx }} $$</h2>
+                <h3 class="is-size-3">Resultado</h3>
+                <p class="is-size-2">&#402;({{ x }}) &#8776; {{ fx }}</p>
               </div>
 
               <div id="chart"></div>
@@ -147,8 +146,7 @@
         { x: '', fx: '' },
         { x: '', fx: '' }
       ],
-      showResult: false,
-      fx: 0
+      showResult: false
     },
     methods: {
       showTable() {
@@ -163,27 +161,25 @@
       addPoint() {
         this.lagrange.push({ x: '', fx: '' });
       },
-      resolve() {
-        this._fx();
-        this.showResult = true;
-      },
       _getValues(method, axis) {
-        return new Promise((resolve, reject) => {
-          let values = [];
-          const length = this[method].length;
-          for (let i = 0; i < length; i++) {
-            values.push(Number(this[method][i][axis]));
-          }
-          resolve(values);
-        })
-      },
-      _fx() {
+        let values = [];
+        const length = this[method].length;
+        for (let i = 0; i < length; i++) {
+          values.push(Number(this[method][i][axis]));
+        }
+        return values;
+      }
+    },
+    computed: {
+      fx() {
         const method = this.form.method;
-        this._getValues(method, 'x').then(xs => {
-          this._getValues(method, 'fx').then(fxs => {
-            Interpolation[method](Number(this.x), xs, fxs).then(res => this.fx = res.toFixed(4));
-          })
-        });
+        const fxs = this._getValues(method, 'fx'),
+          xs = this._getValues(method, 'x');
+        try {
+          return Interpolation[method](Number(this.x), xs, fxs).toFixed(4);
+        } catch (err) {
+          console.error(err);
+        }
       }
     }
   })
